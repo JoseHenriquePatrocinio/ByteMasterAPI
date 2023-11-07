@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using ByteMasterAPI.Context;
+using ByteMasterAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ByteMasterAPI.Context;
-using ByteMasterAPI.Model;
 
 namespace ByteMasterAPI.Controllers
 {
@@ -24,20 +19,20 @@ namespace ByteMasterAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Orcamento>>> Getorcamentotb()
         {
-          if (_context.orcamentotb == null)
-          {
-              return NotFound();
-          }
+            if (_context.orcamentotb == null)
+            {
+                return NotFound();
+            }
             return await _context.orcamentotb.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Orcamento>> GetOrcamento(int id)
         {
-          if (_context.orcamentotb == null)
-          {
-              return NotFound();
-          }
+            if (_context.orcamentotb == null)
+            {
+                return NotFound();
+            }
             var orcamento = await _context.orcamentotb.FindAsync(id);
 
             if (orcamento == null)
@@ -80,10 +75,10 @@ namespace ByteMasterAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Orcamento>> PostOrcamento(Orcamento orcamento)
         {
-          if (_context.orcamentotb == null)
-          {
-              return Problem("Entity set 'AppDbContext.orcamentotb'  is null.");
-          }
+            if (_context.orcamentotb == null)
+            {
+                return Problem("Entity set 'AppDbContext.orcamentotb'  is null.");
+            }
             _context.orcamentotb.Add(orcamento);
             await _context.SaveChangesAsync();
 
