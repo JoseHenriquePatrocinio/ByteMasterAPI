@@ -17,13 +17,27 @@ namespace ByteMasterAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Orcamento>>> Getorcamentotb()
+        [Route("ConsultarOrcamentos")]
+        public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> Getorcamentotb()
         {
-            if (_context.orcamentotb == null)
-            {
+            var query = from o in _context.orcamentotb
+                        join c in _context.clientetb on o.IdCliente equals c.Id
+                        join p in _context.produtotb on o.IdProduto equals p.Id
+                        join s in _context.situacaotb on (int?)o.IdSituacao equals s.Id
+                        select new OrcamentoInfo
+                        {
+                            ClienteNome = c.Nome,
+                            ProdutoModelo = p.Modelo,
+                            ProdutoValorUnitario = p.ValorUnit,
+                            SituacaoDescricao = s.Descricao
+                        };
+
+            var result = await query.ToListAsync();
+
+            if (result == null)
                 return NotFound();
-            }
-            return await _context.orcamentotb.ToListAsync();
+
+            return result;
         }
 
         [HttpGet("{id}")]
