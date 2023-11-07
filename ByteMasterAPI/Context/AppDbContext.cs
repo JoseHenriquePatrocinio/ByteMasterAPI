@@ -15,8 +15,13 @@ namespace ByteMasterAPI.Context
             modelBuilder.Entity<Cliente>()
                 .Property(c => c.Id)
                 .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Orcamento>()
+                .Property(c => c.Id)
+                .ValueGeneratedOnAdd();
         }
 
         public DbSet<Cliente> clientetb { get; set; }
+        public DbSet<Orcamento> orcamentotb { get; set; }
     }
 }

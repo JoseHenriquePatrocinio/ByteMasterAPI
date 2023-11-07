@@ -7,5 +7,12 @@
             Ativo,
             Inativo
         }
+
+        public enum SituacaoOrcamento
+        {
+            Pendente,
+            Ativo,
+            Reprovado
+        }
     }
 }
