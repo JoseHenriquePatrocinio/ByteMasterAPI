@@ -40,22 +40,31 @@ namespace ByteMasterAPI.Controllers
             return result;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Orcamento>> GetOrcamento(int id)
+        [HttpGet]
+        [Route("ConsultarOrcamento")]
+        public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> ConsultarOrcamento(int id)
         {
-            if (_context.orcamentotb == null)
-            {
-                return NotFound();
-            }
-            var orcamento = await _context.orcamentotb.FindAsync(id);
+            var query = from o in _context.orcamentotb
+                        join c in _context.clientetb on o.IdCliente equals c.Id
+                        join p in _context.produtotb on o.IdProduto equals p.Id
+                        join s in _context.situacaotb on (int?)o.IdSituacao equals s.Id
+                        where o.Id == id
+                        select new OrcamentoInfo
+                        {
+                            ClienteNome = c.Nome,
+                            ProdutoModelo = p.Modelo,
+                            ProdutoValorUnitario = p.ValorUnit,
+                            SituacaoDescricao = s.Descricao
+                        };
 
-            if (orcamento == null)
-            {
-                return NotFound();
-            }
+            var result = await query.ToListAsync();
 
-            return orcamento;
+            if (result == null)
+                return NotFound();
+
+            return result;
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOrcamento(int id, Orcamento orcamento)
