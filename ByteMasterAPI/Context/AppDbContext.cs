@@ -24,5 +24,6 @@ namespace ByteMasterAPI.Context
         public DbSet<Cliente> clientetb { get; set; }
         public DbSet<Orcamento> orcamentotb { get; set; }
         public DbSet<OrdemServico> ostb { get; set; }
+        public DbSet<Produto> produtotb { get; set; }
     }
 }
