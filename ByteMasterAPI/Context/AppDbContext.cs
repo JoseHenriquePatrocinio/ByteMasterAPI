@@ -10,6 +10,13 @@ namespace ByteMasterAPI.Context
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Cliente>()
+                .Property(c => c.Id)
+                .ValueGeneratedOnAdd();
+        }
+
         public DbSet<Cliente> clientetb { get; set; }
     }
 }
