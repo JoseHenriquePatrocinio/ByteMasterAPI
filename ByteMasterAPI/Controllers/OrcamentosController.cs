@@ -80,6 +80,27 @@ namespace ByteMasterAPI.Controllers
         }
 
         [HttpPut]
+        [Route("AprovarOrcamento/{id}")]
+        public async Task<IActionResult> AprovarOrcamento(int id)
+        {
+            if (_context.orcamentotb == null)
+                return NotFound();
+
+            var orcamento = await _context.orcamentotb.FindAsync(id);
+
+            if (orcamento == null)
+                return NotFound();
+
+            orcamento.IdSituacao = Enum.SituacaoEnum.SituacaoOrcamento.Ativo;
+
+            _context.Entry(orcamento).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
         [Route("ReprovarOrcamento/{id}")]
         public async Task<IActionResult> ReprovarOrcamento(int id)
         {
