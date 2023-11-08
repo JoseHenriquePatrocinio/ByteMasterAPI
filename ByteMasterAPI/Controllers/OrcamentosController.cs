@@ -65,38 +65,9 @@ namespace ByteMasterAPI.Controllers
             return result;
         }
 
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrcamento(int id, Orcamento orcamento)
-        {
-            if (id != orcamento.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(orcamento).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrcamentoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         [HttpPost]
-        public async Task<ActionResult<Orcamento>> PostOrcamento(Orcamento orcamento)
+        [Route("AdicionarOrcamento")]
+        public async Task<ActionResult<Orcamento>> AdicionarOrcamento(Orcamento orcamento)
         {
             if (_context.orcamentotb == null)
             {
@@ -105,31 +76,28 @@ namespace ByteMasterAPI.Controllers
             _context.orcamentotb.Add(orcamento);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrcamento", new { id = orcamento.Id }, orcamento);
+            return CreatedAtAction("ConsultarOrcamento", new { id = orcamento.Id }, orcamento);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrcamento(int id)
+        [HttpPut]
+        [Route("ReprovarOrcamento/{id}")]
+        public async Task<IActionResult> ReprovarOrcamento(int id)
         {
-            if (_context.orcamentotb == null)
-            {
+            if (_context.orcamentotb == null)         
                 return NotFound();
-            }
+            
             var orcamento = await _context.orcamentotb.FindAsync(id);
-            if (orcamento == null)
-            {
-                return NotFound();
-            }
 
-            _context.orcamentotb.Remove(orcamento);
+            if (orcamento == null)   
+                return NotFound();
+
+            orcamento.IdSituacao = Enum.SituacaoEnum.SituacaoOrcamento.Reprovado;
+
+            _context.Entry(orcamento).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
-
-        private bool OrcamentoExists(int id)
-        {
-            return (_context.orcamentotb?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Ok();
         }
     }
 }
