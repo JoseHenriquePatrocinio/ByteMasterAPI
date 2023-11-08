@@ -14,5 +14,10 @@
             Ativo,
             Reprovado
         }
+        public enum SituacaoOrdem
+        {
+            Ativo,
+            Completa
+        }
     }
 }
