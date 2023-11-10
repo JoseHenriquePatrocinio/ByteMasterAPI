@@ -70,10 +70,9 @@ namespace ByteMasterAPI.Controllers
         [Route("AdicionarOrcamento")]
         public async Task<ActionResult<Orcamento>> AdicionarOrcamento(Orcamento orcamento)
         {
-            if (_context.orcamentotb == null)
-            {
+            if (_context.orcamentotb == null)           
                 return Problem("Entity set 'AppDbContext.orcamentotb'  is null.");
-            }
+            
             _context.orcamentotb.Add(orcamento);
             await _context.SaveChangesAsync();
 

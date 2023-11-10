@@ -17,7 +17,11 @@ namespace ByteMasterAPI.Context
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Orcamento>()
-                .Property(c => c.Id)
+                .Property(o => o.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Produto>()
+                .Property(p => p.Id)
                 .ValueGeneratedOnAdd();
         }
 

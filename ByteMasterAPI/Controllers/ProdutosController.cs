@@ -16,44 +16,34 @@ namespace ByteMasterAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Produtos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> Getprodutotb()
+        [Route ("ConsultarProdutos")]
+        public async Task<ActionResult<IEnumerable<Produto>>> ConsultarProdutos()
         {
-            if (_context.produtotb == null)
-            {
+            if (_context.produtotb == null)       
                 return NotFound();
-            }
+            
             return await _context.produtotb.ToListAsync();
         }
 
-        // GET: api/Produtos/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Produto>> GetProduto(int id)
-        {
-            if (_context.produtotb == null)
-            {
-                return NotFound();
-            }
+        [HttpGet]
+        [Route("ConsultarProduto")]
+        public async Task<ActionResult<Produto>> ConsultarProduto(int id)
+        {           
             var produto = await _context.produtotb.FindAsync(id);
 
-            if (produto == null)
-            {
+            if (produto == null)          
                 return NotFound();
-            }
-
+            
             return produto;
         }
 
-        // PUT: api/Produtos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduto(int id, Produto produto)
+        [HttpPut]
+        [Route("EditarProduto")]
+        public async Task<IActionResult> EditarProduto(int id,Produto produto)
         {
-            if (id != produto.Id)
-            {
-                return BadRequest();
-            }
+            if (id != produto.Id)           
+                return BadRequest();        
 
             _context.Entry(produto).State = EntityState.Modified;
 
@@ -73,47 +63,22 @@ namespace ByteMasterAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
-        // POST: api/Produtos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Produto>> PostProduto(Produto produto)
+        [Route("AdicionarNovoProduto")]
+        public async Task<ActionResult<Produto>> AdicionarNovoProduto(Produto produto)
         {
-            if (_context.produtotb == null)
-            {
+            if (_context.produtotb == null)          
                 return Problem("Entity set 'AppDbContext.produtotb'  is null.");
-            }
+            
             _context.produtotb.Add(produto);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduto", new { id = produto.Id }, produto);
+            return CreatedAtAction("ConsultarProduto", new { id = produto.Id }, produto);
         }
 
-        // DELETE: api/Produtos/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduto(int id)
-        {
-            if (_context.produtotb == null)
-            {
-                return NotFound();
-            }
-            var produto = await _context.produtotb.FindAsync(id);
-            if (produto == null)
-            {
-                return NotFound();
-            }
-
-            _context.produtotb.Remove(produto);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ProdutoExists(int id)
-        {
-            return (_context.produtotb?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        private bool ProdutoExists(int id) => (_context.produtotb?.Any(e => e.Id == id)).GetValueOrDefault();  
     }
 }
