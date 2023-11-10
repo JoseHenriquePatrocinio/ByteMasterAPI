@@ -23,12 +23,14 @@ namespace ByteMasterAPI.Controllers
             var query = from o in _context.ostb
                         join c in _context.clientetb on o.IdCliente_os equals c.Id
                         join p in _context.produtotb on o.IdProduto_os equals p.Id
+                        join s in _context.situacaotb on (int?)o.IdSituacao_os equals s.Id
+                        where s.Id == 3
                         select new OrdemServicoInfo
                         {
                             ClienteNome = c.Nome,
                             ProdutoModelo = p.Modelo,
                             DescricaoProduto = p.Descricao,
-                            Situacao = o.Situacao
+                            SituacaoDescricao = s.Descricao
                         };
 
             var result = await query.ToListAsync();

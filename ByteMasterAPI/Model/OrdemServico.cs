@@ -7,7 +7,7 @@ namespace ByteMasterAPI.Model
         public int Id { get; set; }
         public int IdCliente_os { get; set; }
         public int IdProduto_os { get; set; }
-        public int Situacao { get; set; }
+        public SituacaoOrdem IdSituacao_os { get; set; }
     }
 
     public class OrdemServicoInfo
@@ -15,6 +15,6 @@ namespace ByteMasterAPI.Model
         public string ClienteNome { get; set; }
         public string ProdutoModelo { get; set; }
         public string DescricaoProduto { get; set; }
-        public int Situacao { get; set; }
+        public string SituacaoDescricao { get; set; }
     }
 }

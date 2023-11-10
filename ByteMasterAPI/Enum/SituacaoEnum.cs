@@ -11,13 +11,13 @@
         public enum SituacaoOrcamento
         {
             Pendente,
-            Ativo,
+            Aprovado,
             Reprovado
         }
         public enum SituacaoOrdem
         {
-            Ativo,
-            Completa
+            Ativo = 3,
+            Completa = 4
         }
     }
 }

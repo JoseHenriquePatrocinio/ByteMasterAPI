@@ -92,7 +92,7 @@ namespace ByteMasterAPI.Controllers
             if (orcamento == null)
                 return NotFound();
 
-            orcamento.IdSituacao = Enum.SituacaoEnum.SituacaoOrcamento.Ativo;
+            orcamento.IdSituacao = Enum.SituacaoEnum.SituacaoOrcamento.Aprovado;
 
             _context.Entry(orcamento).State = EntityState.Modified;
 
