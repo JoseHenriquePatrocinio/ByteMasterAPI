@@ -67,7 +67,7 @@ namespace ByteMasterAPI.Controllers
             return result;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [Route("CompletarOrdem/{id}")]
         public async Task<IActionResult> CompletarOrdem(int id)
         {
