@@ -84,9 +84,6 @@ namespace ByteMasterAPI.Controllers
         [Route("AprovarOrcamento/{id}")]
         public async Task<IActionResult> AprovarOrcamento(int id)
         {
-            if (_context.orcamentotb == null)
-                return NotFound();
-
             var orcamento = await _context.orcamentotb.FindAsync(id);
 
             if (orcamento == null)
@@ -104,10 +101,7 @@ namespace ByteMasterAPI.Controllers
         [HttpPut]
         [Route("ReprovarOrcamento/{id}")]
         public async Task<IActionResult> ReprovarOrcamento(int id)
-        {
-            if (_context.orcamentotb == null)         
-                return NotFound();
-            
+        {   
             var orcamento = await _context.orcamentotb.FindAsync(id);
 
             if (orcamento == null)   

@@ -2,6 +2,7 @@
 using ByteMasterAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static ByteMasterAPI.Enum.SituacaoEnum;
 
 namespace ByteMasterAPI.Controllers
 {
@@ -67,35 +68,21 @@ namespace ByteMasterAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrdemServico(int id, OrdemServico ordemServico)
+        [Route("CompletarOrdem/{id}")]
+        public async Task<IActionResult> CompletarOrdem(int id)
         {
-            if (id != ordemServico.Id)
-            {
-                return BadRequest();
-            }
+            var ordemservico = await _context.ostb.FindAsync(id);
 
-            _context.Entry(ordemServico).State = EntityState.Modified;
+            if (ordemservico == null)
+                return NotFound();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrdemServicoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            ordemservico.IdSituacao_os = Enum.SituacaoEnum.SituacaoOrdem.Completa;
 
-            return NoContent();
+            _context.Entry(ordemservico).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
-
-        private bool OrdemServicoExists(int id) => (_context.ostb?.Any(e => e.Id == id)).GetValueOrDefault();
-
     }
 }
