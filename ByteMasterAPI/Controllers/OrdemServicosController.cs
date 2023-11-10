@@ -41,18 +41,29 @@ namespace ByteMasterAPI.Controllers
             return result;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<OrdemServico>> GetOrdemServico(int id)
+        [HttpGet]
+        [Route("ConsultarOrdem")]
+        public async Task<ActionResult<IEnumerable<OrdemServicoInfo>>> ConsultarOrdem(int id)
         {
-            if (_context.ostb == null)
+            var query = from o in _context.ostb
+                        join c in _context.clientetb on o.IdCliente_os equals c.Id
+                        join p in _context.produtotb on o.IdProduto_os equals p.Id
+                        join s in _context.situacaotb on (int?)o.IdSituacao_os equals s.Id
+                        where o.Id == id
+                        select new OrdemServicoInfo
+                        {
+                            ClienteNome = c.Nome,
+                            ProdutoModelo = p.Modelo,
+                            DescricaoProduto = p.Descricao,
+                            SituacaoDescricao = s.Descricao
+                        };
+
+            var result = await query.ToListAsync();
+
+            if (result == null)
                 return NotFound();
 
-            var ordemServico = await _context.ostb.FindAsync(id);
-
-            if (ordemServico == null)
-                return NotFound();
-
-            return ordemServico;
+            return result;
         }
 
         [HttpPut("{id}")]
