@@ -24,6 +24,7 @@ namespace ByteMasterAPI.Controllers
                         join c in _context.clientetb on o.IdCliente equals c.Id
                         join p in _context.produtotb on o.IdProduto equals p.Id
                         join s in _context.situacaotb on (int?)o.IdSituacao equals s.Id
+                        where s.Id == 0
                         select new OrcamentoInfo
                         {
                             ClienteNome = c.Nome,
