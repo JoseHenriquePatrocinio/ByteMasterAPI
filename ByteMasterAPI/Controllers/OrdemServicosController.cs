@@ -22,7 +22,7 @@ namespace ByteMasterAPI.Controllers
         public async Task<ActionResult<IEnumerable<OrdemServicoInfo>>> ConsultarOrdens()
         {
             var query = from o in _context.ostb
-                        join c in _context.clientetb on o.IdCliente_os equals c.Id
+                        join c in _context.clientetb on o.IdCliente_os equals c.Documento
                         join p in _context.produtotb on o.IdProduto_os equals p.Id
                         join s in _context.situacaotb on (int?)o.IdSituacao_os equals s.Id
                         where s.Id == 3
@@ -47,7 +47,7 @@ namespace ByteMasterAPI.Controllers
         public async Task<ActionResult<IEnumerable<OrdemServicoInfo>>> ConsultarOrdem(int id)
         {
             var query = from o in _context.ostb
-                        join c in _context.clientetb on o.IdCliente_os equals c.Id
+                        join c in _context.clientetb on o.IdCliente_os equals c.Documento
                         join p in _context.produtotb on o.IdProduto_os equals p.Id
                         join s in _context.situacaotb on (int?)o.IdSituacao_os equals s.Id
                         where o.Id == id
