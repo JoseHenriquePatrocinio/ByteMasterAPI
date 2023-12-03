@@ -32,7 +32,8 @@ namespace ByteMasterAPI.Controllers
                             ClienteNome = c.Nome,
                             ProdutoModelo = p.Modelo,
                             DescricaoProduto = p.Descricao,
-                            SituacaoDescricao = s.Descricao
+                            SituacaoDescricao = s.Descricao,
+                            DataOs = o.DataOs
                         };
 
             var result = await query.ToListAsync();
@@ -58,7 +59,8 @@ namespace ByteMasterAPI.Controllers
                             ClienteNome = c.Nome,
                             ProdutoModelo = p.Modelo,
                             DescricaoProduto = p.Descricao,
-                            SituacaoDescricao = s.Descricao
+                            SituacaoDescricao = s.Descricao,
+                            DataOs = o.DataOs
                         };
 
             var result = await query.ToListAsync();

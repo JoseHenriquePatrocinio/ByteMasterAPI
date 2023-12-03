@@ -8,6 +8,7 @@ namespace ByteMasterAPI.Model
         public string IdCliente { get; set; }
         public int IdProduto { get; set; }
         public SituacaoOrcamento IdSituacao { get; set; }
+        public DateTime Data { get; set; } = DateTime.Now;
     }
 
     public class OrcamentoInfo
@@ -17,6 +18,7 @@ namespace ByteMasterAPI.Model
         public string ProdutoModelo { get; set; }
         public double ProdutoValorUnitario { get; set; }
         public string SituacaoDescricao { get; set; }
+        public DateTime Data { get; set; }
     }
 
 }
