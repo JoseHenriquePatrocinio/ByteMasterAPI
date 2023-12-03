@@ -21,7 +21,7 @@ namespace ByteMasterAPI.Controllers
         public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> Getorcamentotb()
         {
             var query = from o in _context.orcamentotb
-                        join c in _context.clientetb on o.IdCliente equals c.Id
+                        join c in _context.clientetb on o.IdCliente equals c.Documento
                         join p in _context.produtotb on o.IdProduto equals p.Id
                         join s in _context.situacaotb on (int?)o.IdSituacao equals s.Id
                         where s.Id == 0
@@ -46,7 +46,7 @@ namespace ByteMasterAPI.Controllers
         public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> ConsultarOrcamento(int id)
         {
             var query = from o in _context.orcamentotb
-                        join c in _context.clientetb on o.IdCliente equals c.Id
+                        join c in _context.clientetb on o.IdCliente equals c.Documento
                         join p in _context.produtotb on o.IdProduto equals p.Id
                         join s in _context.situacaotb on (int?)o.IdSituacao equals s.Id
                         where o.Id == id
