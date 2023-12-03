@@ -17,35 +17,34 @@ namespace ByteMasterAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> Getclientetb()
+        [Route("ConsultarClientes")]
+        public async Task<ActionResult<IEnumerable<Cliente>>> ConsultarClientes()
         {
-            if (_context.clientetb == null)            
+            if (_context.clientetb == null)
                 return NotFound();
-            
+
             return await _context.clientetb.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
-        {
-            if (_context.clientetb == null)            
-                return NotFound();
-            
-            var cliente = await _context.clientetb.FindAsync(id);
+        [HttpGet]
+        [Route("ConsultarCliente/{documento}")]
+        public async Task<ActionResult<Cliente>> ConsultarCliente(string documento)
+        {      
+            var cliente = await _context.clientetb.SingleOrDefaultAsync(c => c.Documento == documento);
 
             if (cliente == null)           
-                return NotFound();          
+                return NotFound("Cliente não encontrado");          
 
             return cliente;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCliente(int id, Cliente cliente)
+        [HttpPut]
+        [Route("AtualizarCadastro/{documento}")]
+        public async Task<IActionResult> AtualizarCadastro(string documento, Cliente cliente)
         {
-            if (id != cliente.Id)          
+            if (documento != cliente.Documento)          
                 return BadRequest();
             
-
             _context.Entry(cliente).State = EntityState.Modified;
 
             try
@@ -54,7 +53,7 @@ namespace ByteMasterAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClienteExists(id))
+                if (!ClienteExists(documento))
                 {
                     return NotFound();
                 }
@@ -64,11 +63,12 @@ namespace ByteMasterAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        [Route("AdicionarCliente")]
+        public async Task<ActionResult<Cliente>> AdicionarCliente(Cliente cliente)
         {
             if (_context.clientetb == null)           
                 return Problem("Entity set 'AppDbContext.clientetb'  is null.");
@@ -76,25 +76,27 @@ namespace ByteMasterAPI.Controllers
             _context.clientetb.Add(cliente);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCliente", new { id = cliente.Id }, cliente);
+            return CreatedAtAction("ConsultarCliente", new { documento = cliente.Documento }, cliente);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(int id)
+        [HttpPut]
+        [Route("SituacaoCliente/{documento}")]
+        public async Task<IActionResult> SituacaoCliente(string documento)
         {
             if (_context.clientetb == null)          
                 return NotFound();
-            
-            var cliente = await _context.clientetb.FindAsync(id);
-            if (cliente == null)           
-                return NotFound();           
 
-            _context.clientetb.Remove(cliente);
+            var cliente = await _context.clientetb.SingleOrDefaultAsync(c => c.Documento == documento);
+            if (cliente == null)           
+                return NotFound();
+
+            cliente.Situacao = (cliente.Situacao == Enum.SituacaoEnum.SituacaoCliente.Ativo) ? Enum.SituacaoEnum.SituacaoCliente.Inativo : Enum.SituacaoEnum.SituacaoCliente.Ativo;
+            
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
-        private bool ClienteExists(int id) => (_context.clientetb?.Any(e => e.Id == id)).GetValueOrDefault();      
+        private bool ClienteExists(string doc) => (_context.clientetb?.Any(e => e.Documento == doc)).GetValueOrDefault();      
     }
 }

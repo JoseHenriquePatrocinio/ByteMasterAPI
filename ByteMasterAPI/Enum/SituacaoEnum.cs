@@ -7,5 +7,17 @@
             Ativo,
             Inativo
         }
+
+        public enum SituacaoOrcamento
+        {
+            Pendente,
+            Aprovado,
+            Reprovado
+        }
+        public enum SituacaoOrdem
+        {
+            Ativo = 3,
+            Completa = 4
+        }
     }
 }
