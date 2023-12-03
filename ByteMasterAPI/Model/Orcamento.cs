@@ -12,6 +12,7 @@ namespace ByteMasterAPI.Model
 
     public class OrcamentoInfo
     {
+        public int Id { get; set; }
         public string ClienteNome { get; set; }
         public string ProdutoModelo { get; set; }
         public double ProdutoValorUnitario { get; set; }

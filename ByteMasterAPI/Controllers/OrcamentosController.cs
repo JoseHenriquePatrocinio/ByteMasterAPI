@@ -27,6 +27,7 @@ namespace ByteMasterAPI.Controllers
                         where s.Id == 0
                         select new OrcamentoInfo
                         {
+                            Id = o.Id,
                             ClienteNome = c.Nome,
                             ProdutoModelo = p.Modelo,
                             ProdutoValorUnitario = p.ValorUnit,
