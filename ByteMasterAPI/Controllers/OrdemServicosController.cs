@@ -28,6 +28,7 @@ namespace ByteMasterAPI.Controllers
                         where s.Id == 3
                         select new OrdemServicoInfo
                         {
+                            Id = o.Id,
                             ClienteNome = c.Nome,
                             ProdutoModelo = p.Modelo,
                             DescricaoProduto = p.Descricao,
@@ -53,6 +54,7 @@ namespace ByteMasterAPI.Controllers
                         where o.Id == id
                         select new OrdemServicoInfo
                         {
+                            Id = o.Id,
                             ClienteNome = c.Nome,
                             ProdutoModelo = p.Modelo,
                             DescricaoProduto = p.Descricao,
