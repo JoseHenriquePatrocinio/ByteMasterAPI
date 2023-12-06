@@ -45,7 +45,7 @@ namespace ByteMasterAPI.Controllers
 
         [HttpGet]
         [Route("ConsultarOrcamento")]
-        public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> ConsultarOrcamento(int id)
+        public async Task<ActionResult<OrcamentoInfo>> ConsultarOrcamento(int id)
         {
             var query = from o in _context.orcamentotb
                         join c in _context.clientetb on o.IdCliente equals c.Documento
@@ -61,7 +61,7 @@ namespace ByteMasterAPI.Controllers
                             Data = o.Data
                         };
 
-            var result = await query.ToListAsync();
+            var result = await query.FirstOrDefaultAsync();
 
             if (result == null)
                 return NotFound();

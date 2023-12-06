@@ -46,7 +46,7 @@ namespace ByteMasterAPI.Controllers
 
         [HttpGet]
         [Route("ConsultarOrdem")]
-        public async Task<ActionResult<IEnumerable<OrdemServicoInfo>>> ConsultarOrdem(int id)
+        public async Task<ActionResult<OrdemServicoInfo>> ConsultarOrdem(int id)
         {
             var query = from o in _context.ostb
                         join c in _context.clientetb on o.IdCliente_os equals c.Documento
@@ -63,7 +63,7 @@ namespace ByteMasterAPI.Controllers
                             DataOs = o.DataOs
                         };
 
-            var result = await query.ToListAsync();
+            var result = await query.FirstOrDefaultAsync();
 
             if (result == null)
                 return NotFound();
