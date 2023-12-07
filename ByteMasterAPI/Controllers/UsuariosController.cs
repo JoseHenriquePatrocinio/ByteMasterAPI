@@ -1,6 +1,9 @@
 ﻿using ByteMasterAPI.Context;
 using ByteMasterAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace ByteMasterAPI.Controllers
 {
@@ -50,7 +53,22 @@ namespace ByteMasterAPI.Controllers
                 return Unauthorized("Usuário ou senha incorretos");
             }
 
-            return Ok();
+            var token = GenerateJwtToken(user);
+
+            return Ok(new { Token = token });
+        }
+
+        private string GenerateJwtToken(Usuario user)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("68580e2222864915990c92f390d92426"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
     }
