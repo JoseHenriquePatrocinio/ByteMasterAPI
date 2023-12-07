@@ -26,6 +26,10 @@ namespace ByteMasterAPI.Context
             modelBuilder.Entity<Produto>()
                 .Property(p => p.Id)
                 .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Usuario>()
+                .Property(p => p.Id)
+                .ValueGeneratedOnAdd();
         }
 
         public DbSet<Cliente> clientetb { get; set; }
@@ -33,5 +37,6 @@ namespace ByteMasterAPI.Context
         public DbSet<OrdemServico> ostb { get; set; }
         public DbSet<Produto> produtotb { get; set; }
         public DbSet<Situacao> situacaotb { get; set; }
+        public DbSet<Usuario> usuariotb { get; set; }
     }
 }
