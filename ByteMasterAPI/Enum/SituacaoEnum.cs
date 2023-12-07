@@ -19,5 +19,11 @@
             Ativo = 3,
             Completa = 4
         }
+        public enum Role
+        {
+            Gerente = 5,
+            Tecnico = 6,
+            Atendente = 7 
+        }
     }
 }
