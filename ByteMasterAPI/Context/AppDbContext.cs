@@ -13,6 +13,9 @@ namespace ByteMasterAPI.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cliente>()
+                .HasKey(c => c.Documento);
+
+            modelBuilder.Entity<Cliente>()
                 .Property(c => c.Id)
                 .ValueGeneratedOnAdd();
 

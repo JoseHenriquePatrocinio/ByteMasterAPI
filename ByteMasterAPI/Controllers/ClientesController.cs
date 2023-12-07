@@ -42,25 +42,23 @@ namespace ByteMasterAPI.Controllers
         [Route("AtualizarCadastro/{documento}")]
         public async Task<IActionResult> AtualizarCadastro(string documento, Cliente cliente)
         {
-            if (documento != cliente.Documento)          
+            if (documento != cliente.Documento)
                 return BadRequest();
-            
-            _context.Entry(cliente).State = EntityState.Modified;
 
             try
             {
+                var clienteExistente = await _context.clientetb.FindAsync(documento);
+
+                if (clienteExistente == null)
+                    return NotFound();
+
+                _context.Entry(clienteExistente).CurrentValues.SetValues(cliente);
+
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                if (!ClienteExists(documento))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return ConcurrencyErrorResponse(ex);
             }
 
             return Ok();
@@ -70,9 +68,12 @@ namespace ByteMasterAPI.Controllers
         [Route("AdicionarCliente")]
         public async Task<ActionResult<Cliente>> AdicionarCliente(Cliente cliente)
         {
-            if (_context.clientetb == null)           
-                return Problem("Entity set 'AppDbContext.clientetb'  is null.");
-            
+            if (_context.clientetb == null)
+                return Problem("Entity set 'AppDbContext.clientetb' is null");
+
+            cliente.Documento = RemoverPontuacao(cliente.Documento);
+            cliente.Contato = RemoverPontuacao(cliente.Contato);
+
             _context.clientetb.Add(cliente);
             await _context.SaveChangesAsync();
 
@@ -97,6 +98,7 @@ namespace ByteMasterAPI.Controllers
             return Ok();
         }
 
-        private bool ClienteExists(string doc) => (_context.clientetb?.Any(e => e.Documento == doc)).GetValueOrDefault();      
+        private string RemoverPontuacao(string documento) => new string(documento.Where(char.IsDigit).ToArray());
+        private IActionResult ConcurrencyErrorResponse(DbUpdateConcurrencyException ex) => StatusCode(409, "Conflito de concorrência. Os dados foram modificados por outra transação.");     
     }
 }
