@@ -45,6 +45,33 @@ namespace ByteMasterAPI.Controllers
         }
 
         [HttpGet]
+        [Route("ConsultarOrdensPorData")]
+        public async Task<ActionResult<IEnumerable<OrdemServicoInfo>>> ConsultarOrdensPorData(DateTime inicio, DateTime termino)
+        {
+            var query = from o in _context.ostb
+                        join c in _context.clientetb on o.IdCliente_os equals c.Documento
+                        join p in _context.produtotb on o.IdProduto_os equals p.Id
+                        join s in _context.situacaotb on (int?)o.IdSituacao_os equals s.Id
+                        where o.DataOs >= inicio && o.DataOs <= termino
+                        select new OrdemServicoInfo
+                        {
+                            Id = o.Id,
+                            ClienteNome = c.Nome,
+                            ProdutoModelo = p.Modelo,
+                            DescricaoProduto = p.Descricao,
+                            SituacaoDescricao = s.Descricao,
+                            DataOs = o.DataOs
+                        };
+
+            var result = await query.ToListAsync();
+
+            if (result == null || result.Count == 0)
+                return NotFound();
+
+            return result;
+        }
+
+        [HttpGet]
         [Route("ConsultarOrdem")]
         public async Task<ActionResult<OrdemServicoInfo>> ConsultarOrdem(int id)
         {

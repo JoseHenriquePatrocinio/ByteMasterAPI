@@ -18,7 +18,7 @@ namespace ByteMasterAPI.Controllers
 
         [HttpGet]
         [Route("ConsultarOrcamentos")]
-        public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> Getorcamentotb()
+        public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> ConsultarOrcamentos()
         {
             var query = from o in _context.orcamentotb
                         join c in _context.clientetb on o.IdCliente equals c.Documento
@@ -42,6 +42,34 @@ namespace ByteMasterAPI.Controllers
 
             return result;
         }
+
+        [HttpGet]
+        [Route("ConsultarOrcamentosPorData")]
+        public async Task<ActionResult<IEnumerable<OrcamentoInfo>>> ConsultarOrcamentosPorData(DateTime inicio, DateTime termino)
+        {
+            var query = from o in _context.orcamentotb
+                        join c in _context.clientetb on o.IdCliente equals c.Documento
+                        join p in _context.produtotb on o.IdProduto equals p.Id
+                        join s in _context.situacaotb on (int?)o.IdSituacao equals s.Id
+                        where o.Data >= inicio && o.Data <= termino
+                        select new OrcamentoInfo
+                        {
+                            Id = o.Id,
+                            ClienteNome = c.Nome,
+                            ProdutoModelo = p.Modelo,
+                            ProdutoValorUnitario = p.ValorUnit,
+                            SituacaoDescricao = s.Descricao,
+                            Data = o.Data
+                        };
+
+            var result = await query.ToListAsync();
+
+            if (result == null || result.Count == 0)
+                return NotFound();
+
+            return result;
+        }
+
 
         [HttpGet]
         [Route("ConsultarOrcamento")]
